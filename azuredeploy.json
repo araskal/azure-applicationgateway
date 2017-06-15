@@ -530,28 +530,28 @@
             "value": "[parameters('trustedSubnetName')]"
           },
           "subnet3Name": {
-            "value": "[parameters('trustedSubnetName')]"
+            "value": "[parameters('appGatewaySubnetName')]"
           },
           "subnet4Name": {
-            "value": "[parameters('trustedSubnetName')]"
+            "value": "[parameters('backendSubnetName')]"
           },
           "subnet5Name": {
-            "value": "[parameters('trustedSubnetName')]"
+            "value": "[parameters('UntrustXGSubnetName')]"
           },
           "subnet6Name": {
-            "value": "[parameters('trustedSubnetName')]"
+            "value": "[parameters('TrustXGSubnetName')]"
           },
           "subnet7Name": {
-            "value": "[parameters('trustedSubnetName')]"
+            "value": "[parameters('AuthSubnetName')]"
           },
           "subnet8Name": {
-            "value": "[parameters('trustedSubnetName')]"
+            "value": "[parameters('LogSubnetName')]"
           },
           "subnet9Name": {
-            "value": "[parameters('trustedSubnetName')]"
+            "value": "[parameters('DBSubnetName')]"
           },
           "subnet10Name": {
-            "value": "[parameters('appGatewaySubnetName')]"
+            "value": "[parameters('FileServSubnetName')]"
           },
           "subnet0Prefix": {
             "value": "[parameters('mgmtSubnetPrefix')]"
@@ -563,28 +563,28 @@
             "value": "[parameters('trustedSubnetPrefix')]"
           },
           "subnet3Prefix": {
-            "value": "[parameters('trustedSubnetPrefix')]"
+            "value": "[parameters('appGatewaySubnetPrefix')]"
           },
           "subnet4Prefix": {
-            "value": "[parameters('trustedSubnetPrefix')]"
+            "value": "[parameters('backendSubnetPrefix')]"
           },
           "subnet5Prefix": {
-            "value": "[parameters('trustedSubnetPrefix')]"
+            "value": "[parameters('UntrustXGSubnetPrefix')]"
           },
           "subnet6Prefix": {
-            "value": "[parameters('trustedSubnetPrefix')]"
+            "value": "[parameters('TrustXGSubnetPrefix')]"
           },
           "subnet7Prefix": {
-            "value": "[parameters('trustedSubnetPrefix')]"
+            "value": "[parameters('AuthSubnetPrefix')]"
           },
           "subnet8Prefix": {
-            "value": "[parameters('trustedSubnetPrefix')]"
+            "value": "[parameters('LogSubnetPrefix')]"
           },
           "subnet9Prefix": {
-            "value": "[parameters('trustedSubnetPrefix')]"
+            "value": "[parameters('DBSubnetPrefix')]"
           },
           "subnet10Prefix": {
-            "value": "[parameters('appGatewaySubnetPrefix')]"
+            "value": "[parameters('FileServSubnetPrefix')]"
           },
           "adminUsername": {
             "value": "[parameters('username')]"
