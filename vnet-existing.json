@@ -41,14 +41,56 @@
         "description": "Subnet for Trust"
       }
     },
-    "subnetLBName": {
+    "subnet5Name": {
+      "type": "string",
+      "defaultValue": "UntrustXG",
+      "metadata": {
+        "description": "Subnet for Untrust XG"
+      }
+    },
+    "subnet6Name": {
+      "type": "string",
+      "defaultValue": "TrustXG",
+      "metadata": {
+        "description": "Subnet for Trust XG"
+      }
+    },
+    "subnet7Name": {
+      "type": "string",
+      "defaultValue": "Auth",
+      "metadata": {
+        "description": "Subnet for Auth"
+      }
+    },
+    "subnet8Name": {
+      "type": "string",
+      "defaultValue": "Log",
+      "metadata": {
+        "description": "Subnet for Log"
+      }
+    },
+    "subnet9Name": {
+      "type": "string",
+      "defaultValue": "DB",
+      "metadata": {
+        "description": "Subnet for DB"
+      }
+    },
+    "subnet10Name": {
+      "type": "string",
+      "defaultValue": "File",
+      "metadata": {
+        "description": "Subnet for File"
+      }
+    },
+    "subnet3Name": {
       "type": "string",
       "defaultValue": "UntrustLB",
       "metadata": {
         "description": "Subnet for App Gateway"
       }
     },
-    "subnetWWWName": {
+    "subnet4Name": {
       "type": "string",
       "defaultValue": "backendSubnet",
       "metadata": {
@@ -76,14 +118,14 @@
         "description": "Trust subnet CIDR"
       }
     },
-    "subnetLBPrefix": {
+    "subnet3Prefix": {
       "type": "string",
       "defaultValue": "192.168.3.0/24",
       "metadata": {
         "description": "App Gateway CIDR"
       }
     },
-    "subnetWWWPrefix": {
+    "subnet4Prefix": {
       "type": "string",
       "defaultValue": "192.168.4.0/24",
       "metadata": {
@@ -101,6 +143,48 @@
     "vnetName": {
       "value": "[parameters('virtualNetworkName')]",
       "type": "string"
+    },
+    "subnet5Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.5.0/24",
+      "metadata": {
+        "description": "Untrusted XG CIDR"
+      }
+    },
+    "subnet6Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.6.0/24",
+      "metadata": {
+        "description": "Trusted XG CIDR"
+      }
+    },
+    "subnet7Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.7.0/24",
+      "metadata": {
+        "description": "Auth CIDR"
+      }
+    },
+    "subnet8Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.8.0/24",
+      "metadata": {
+        "description": "Log CIDR"
+      }
+    },
+    "subnet9Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.9.0/24",
+      "metadata": {
+        "description": "DB CIDR"
+      }
+    },
+    "subnet10Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.10.0/24",
+      "metadata": {
+        "description": "File Services CIDR"
+      }
     }
   }
 }
