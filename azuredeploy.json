@@ -267,14 +267,12 @@
       "metadata": {
         "description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
       }
-      "defaultValue":  "promaster"
     },
     "storageAccountName": {
       "type": "string",
       "metadata": {
         "description": "Name of the storage account created to store the VM's disks.  Storage account name must be globally unique."
       }
-      "defaultValue":  "promasterstorage"
     },
     "storageAccountNewOrExisting": {
       "type": "string",
