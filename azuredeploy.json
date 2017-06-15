@@ -409,10 +409,10 @@
             "value": "[parameters('backendSubnetName')]"
           },
           "subnet5Name": {
-            "value": "[parameters('untrustedXGSubnetName')]"
+            "value": "[parameters('untrustXGSubnetName')]"
           },
           "subnet6Name": {
-            "value": "[parameters('trustedXGSubnetName')]"
+            "value": "[parameters('trustXGSubnetName')]"
           },
           "subnet7Name": {
             "value": "[parameters('AuthSubnetName')]"
