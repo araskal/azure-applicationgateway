@@ -9,48 +9,48 @@
       }
     },
     "vmCount": {
-       "type": "int",
-       "defaultValue": 2,
-       "metadata": {
-           "description": "Number of VM-Series firewall"
-       }
+      "type": "int",
+      "defaultValue": 2,
+      "metadata": {
+        "description": "Number of VM-Series firewall"
+      }
     },
     "vmName": {
-       "type": "string",
-       "metadata": {
-          "description": "Name of VM-Series VM in the Azure portal"
-       },
-       "defaultValue": "VM-Series"
+      "type": "string",
+      "metadata": {
+        "description": "Name of VM-Series VM in the Azure portal"
+      },
+      "defaultValue": "VM-Series"
     },
     "vmSize": {
-       "type": "string",
-       "allowedValues": [
-          "Standard_D3",
-          "Standard_D4",
-          "Standard_D3_v2",
-          "Standard_D4_v2",
-          "Standard_D5_v2",
-          "Standard_D14_v2", 
-          "Standard_A4"
-       ],
-       "metadata": {
-          "description": "Azure VM size for VM-Series"
-       },
-       "defaultValue": "Standard_D3"
+      "type": "string",
+      "allowedValues": [
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_D5_v2",
+        "Standard_D14_v2",
+        "Standard_A4"
+      ],
+      "metadata": {
+        "description": "Azure VM size for VM-Series"
+      },
+      "defaultValue": "Standard_D3"
     },
     "imageSku": {
-       "type": "string",
-       "allowedValues": [
-          "byol",
-          "bundle1",
-          "bundle2"
-       ],
-       "metadata": {
-          "description": "byol = Bring Your Own License; bundle1 = Bundle 1 PAYG (Hourly); bundle2 = Bundle 2 PAYG (Hourly)"
-       },
-       "defaultValue": "byol"
+      "type": "string",
+      "allowedValues": [
+        "byol",
+        "bundle1",
+        "bundle2"
+      ],
+      "metadata": {
+        "description": "byol = Bring Your Own License; bundle1 = Bundle 1 PAYG (Hourly); bundle2 = Bundle 2 PAYG (Hourly)"
+      },
+      "defaultValue": "byol"
     },
-    "virtualNetworkName": { 
+    "virtualNetworkName": {
       "type": "string",
       "metadata": {
         "description": "Name of the Virtual Network (VNET)"
@@ -85,11 +85,60 @@
         "description": "Subnet for Trust"
       }
     },
-    "subnetLBName": {
+    "subnet3Name": {
       "type": "string",
       "defaultValue": "UntrustLB",
       "metadata": {
         "description": "Subnet for App Gateway"
+      }
+    },
+    "subnet4Name": {
+      "type": "string",
+      "defaultValue": "backendsubnet",
+      "metadata": {
+        "description": "Subnet for DMZ/Web"
+      }
+    },
+    "subnet5Name": {
+      "type": "string",
+      "defaultValue": "UntrustXG",
+      "metadata": {
+        "description": "Subnet for Untrusted XG"
+      }
+    },
+    "subnet6Name": {
+      "type": "string",
+      "defaultValue": "TrustXG",
+      "metadata": {
+        "description": "Subnet for Trusted XG"
+      }
+    },
+    "subnet7Name": {
+      "type": "string",
+      "defaultValue": "Auth",
+      "metadata": {
+        "description": "Subnet for Authentication Services"
+      }
+    },
+    "subnet8Name": {
+      "type": "string",
+      "defaultValue": "Log",
+      "metadata": {
+        "description": "Subnet for Logging"
+      }
+    },
+    "subnet9Name": {
+      "type": "string",
+      "defaultValue": "DB",
+      "metadata": {
+        "description": "Subnet for Databases"
+      }
+    },
+    "subnet10Name": {
+      "type": "string",
+      "defaultValue": "File",
+      "metadata": {
+        "description": "Subnet for File Serversy"
       }
     },
     "subnet0Prefix": {
@@ -113,11 +162,60 @@
         "description": "Trust subnet CIDR"
       }
     },
-    "subnetLBPrefix": {
+    "subnet3Prefix": {
       "type": "string",
       "defaultValue": "192.168.3.0/24",
       "metadata": {
         "description": "App Gateway subnet CIDR"
+      }
+    },
+    "subnet4Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.4.0/24",
+      "metadata": {
+        "description": "DMZ/Web Subnet CIDR"
+      }
+    },
+    "subnet5Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.5.0/24",
+      "metadata": {
+        "description": "Sophos Untrust XG CIDR"
+      }
+    },
+    "subnet6Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.6.0/24",
+      "metadata": {
+        "description": "Sophos Trust XG subnet CIDR"
+      }
+    },
+    "subnet7Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.7.0/24",
+      "metadata": {
+        "description": "Auth subnet CIDR"
+      }
+    },
+    "subnet8Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.8.0/24",
+      "metadata": {
+        "description": "Log subnet CIDR"
+      }
+    },
+    "subnet9Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.9.0/24",
+      "metadata": {
+        "description": "DB subnet CIDR"
+      }
+    },
+    "subnet10Prefix": {
+      "type": "string",
+      "defaultValue": "192.168.10.0/24",
+      "metadata": {
+        "description": "File Server subnet CIDR"
       }
     },
     "adminUsername": {
@@ -138,7 +236,7 @@
       "metadata": {
         "artifactsBaseUrl": "",
         "description": "URL to acquire other VM-Series for Azure templates"
-      },
+      }
     },
     "MgmtPublicIPAddressName": {
       "type": "string",
@@ -153,16 +251,16 @@
         "description": "Name prefix of the new storage account created to store the VM's disks"
       }
     },
-    "storageAccountNewOrExisting" : {
-       "type": "string",
-       "defaultValue" : "new",
-       "allowedValues" : [
-          "new",
-          "existing"
-       ],
-       "metadata": {
-          "Description": "Storage Account is new or existing"
-       }
+    "storageAccountNewOrExisting": {
+      "type": "string",
+      "defaultValue": "new",
+      "allowedValues": [
+        "new",
+        "existing"
+      ],
+      "metadata": {
+        "Description": "Storage Account is new or existing"
+      }
     },
     "storageAccountType": {
       "type": "string",
@@ -179,7 +277,7 @@
     },
     "Bootstrap": {
       "type": "string",
-      "defaultValue" : "no",
+      "defaultValue": "no",
       "allowedValues": [
         "yes",
         "no"
@@ -190,35 +288,35 @@
     },
     "BootstrapUri": {
       "type": "string",
-      "defaultValue" : "",
+      "defaultValue": "",
       "metadata": {
         "description": "Bootstrap disk storage account URI with container name"
       }
     },
     "BootstrapUriSizeGB": {
       "type": "string",
-      "defaultValue" : "1",
+      "defaultValue": "1",
       "metadata": {
         "description": "Bootstrap disk disk in GB"
       }
     },
     "authenticationType": {
-            "type": "string",
-            "metadata": {
-                "description": "Type of administrator user authentication "
-            },
-            "allowedValues": [
-                "sshPublicKey",
-                "password"
-            ],
-            "defaultValue": "password"
+      "type": "string",
+      "metadata": {
+        "description": "Type of administrator user authentication "
+      },
+      "allowedValues": [
+        "sshPublicKey",
+        "password"
+      ],
+      "defaultValue": "password"
     },
     "sshKey": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "SSH rsa public key file as a string."
-            }
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "SSH rsa public key file as a string."
+      }
     }
   },
   "variables": {
