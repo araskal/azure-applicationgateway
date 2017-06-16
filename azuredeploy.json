@@ -514,9 +514,6 @@
           "vmSize": {
             "value": "[parameters('firewallVmSize')]"
           },
-          "xgname": {
-            "value": "[parameters('xgfirewallname')]"
-          },
           "virtualNetworkName": {
             "value": "[reference('SetupVNET').outputs.vnetName.value]"
           },
