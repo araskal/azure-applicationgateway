@@ -13,5 +13,7 @@ This project is a fork of the Palo-Alto VM-Series azure deployment, customised f
 * Release Notes: Included in this repository.
 * Technical Documentation:[VM-Series Deployment Guide](https://www.paloaltonetworks.com/documentation/71/virtualization/virtualization/set-up-the-vm-series-firewall-in-azure/deploy-the-vm-series-and-azure-application-gateway-template.html)
 * About the [VM-Series Firewall for Azure](https://azure.paloaltonetworks.com)
+* About the [Sophos XG Firewall for Azure](https://www.sophos.com/azure)
+
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Faraskal%2Fazure-applicationgateway%2Fmaster%2Fazuredeploy.json)
