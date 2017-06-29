@@ -335,17 +335,25 @@
     }
   },
   "variables": {
-    "location" : "[resourceGroup().location]",
-    "rgname" : "[resourceGroup().name]",
-    "LoadBalancerType" : "layer-7",
-    "firewallVmCount" : 2,
-    "baseUrl" : "https://raw.githubusercontent.com/araskal/azure-applicationgateway/master/",
-    "nsgURL" : "[concat(variables('baseUrl'),'/nsg-new.json')]",
-    "vnetURL" : "[concat(variables('baseUrl'),'/vnet-', parameters('virtualNetworkNewOrExisting'),'.json')]",
-    "publicLBURL" : "[concat(variables('baseUrl'),'/public-lb-', variables('LoadBalancerType'), '.json')]",
-    "privateLBURL" : "[concat(variables('baseUrl'),'/private-lb-', parameters('authenticationType'),'.json')]",
-    "storageAccountSetupURL" : "[concat(variables('baseUrl'),'/storageAccount-',parameters('storageAccountNewOrExisting'),'.json')]",
-    "vmseriesURL" : "[concat(variables('baseUrl'),'/vmseries.json')]"
+    "location": "[resourceGroup().location]",
+    "rgname": "[resourceGroup().name]",
+    "LoadBalancerType": "layer-7",
+    "firewallVmCount": 2,
+    "baseUrl": "https://raw.githubusercontent.com/araskal/azure-applicationgateway/master/",
+    "nsgURL": "[concat(variables('baseUrl'),'/nsg-new.json')]",
+    "vnetURL": "[concat(variables('baseUrl'),'/vnet-new.json')]",
+    "publicLBURL": "[concat(variables('baseUrl'),'/public-lb-', variables('LoadBalancerType'), '.json')]",
+    "privateLBURL": "[concat(variables('baseUrl'),'/private-lb-password.json')]",
+    "storageAccountSetupURL": "[concat(variables('baseUrl'),'/storageAccount-new.json')]",
+    "vmseriesURL": "[concat(variables('baseUrl'),'/vmseries.json')]",
+    "setupXG": "[concat(variables('baseUrl'),'/setupXG.json')]",
+    "setupWebServer": "[concat(variables('baseUrl'),'/setupWebServer.json')]",
+    "setupLogServer": "[concat(variables('baseUrl'),'/setupLogServer.json')]",
+    "setupDBServer": "[concat(variables('baseUrl'),'/setupDBServer.json')]",
+    "setupFileServer": "[concat(variables('baseUrl'),'/setupFileServer.json')]",
+    "setupAppServer": "[concat(variables('baseUrl'),'/setupAppServer.json')]",
+    "privateLBURL2": "[concat(variables('baseUrl'),'/setup2ndLBInternal.json')]",
+    "privateLBURL3":  "[concat(variables('baseUrl'),'/setup3rdLBInternal.json')]"
   },
   "resources": [
     {
