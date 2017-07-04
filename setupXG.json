@@ -1,174 +1,181 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "vmName": {
-            "type": "string",
-            "defaultValue": "XG-Firewall",
-            "metadata": {
-                "description": "Name for the Virtual Machine."
-            }
-        },
-        "adminPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Password for the Virtual Machine."
-            }
-        },
-        "imageSku": {
-            "type": "string",
-            "defaultValue": "byol",
-            "allowedValues": [
-                "byol",
-                "payg"
-            ],
-            "metadata": {
-                "description": "License type to use."
-            }
-        },
-        "vmSize": {
-            "type": "string",
-            "defaultValue": "Standard_A3",
-            "metadata": {
-                "description": "Size of the Virtual Machine."
-            }
-        },
-        "netNewOrExisting": {
-            "type": "string",
-            "defaultValue": "existing",
-            "allowedValues": [
-                "new",
-                "existing"
-            ],
-            "metadata": {
-                "description": "Create new Virtual Network or use an existing one."
-            }
-        },
-        "netRG": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Resource Group of existing Virtual Network (optional)."
-            }
-        },
-      "virtualNetworkName": {
-        "type": "string",
-        "defaultValue": "vnet-FW",
-        "metadata": {
-          "description": "Name of the Virtual Network."
-        }
-      },
-        "netPrefix": {
-            "type": "string",
-            "defaultValue": "192.168.0.0/16",
-            "metadata": {
-                "description": "Prefix for the Virtual Network."
-            }
-        },
-        "wanName": {
-            "type": "string",
-            "defaultValue": "UntrustXG",
-            "metadata": {
-                "description": "Name of the WAN side Subnet."
-            }
-        },
-      "wanPrefix": {
-        "type": "string",
-        "defaultValue": "192.168.5.0/24",
-        "metadata": {
-          "description": "Prefix for the WAN side Subnet."
-        }
-      },
-        "lanName": {
-            "type": "string",
-            "defaultValue": "TrustXG",
-            "metadata": {
-                "description": "Name of the LAN side Subnet."
-            }
-        },
-      "lanPrefix": {
-        "type": "string",
-        "defaultValue": "192.168.6.0/24",
-        "metadata": {
-          "description": "Prefix for the LAN side Subnet."
-        }
-      },
-        "storageNewOrExisting": {
-            "type": "string",
-            "defaultValue": "existing",
-            "allowedValues": [
-                "new",
-                "existing"
-            ],
-            "metadata": {
-                "description": "Create new Storage Account or use an existing one."
-            }
-        },
-        "storageName": {
-          "type": "string",
-          "defaultValue": "promasterstorage",
-            "metadata": {
-                "description": "Unique name for Storage Account."
-            }
-        },
-        "nicWan": {
-            "type": "string",
-            "defaultValue": "PortB",
-            "metadata": {
-                "description": "Network Interface Name for WAN Zone"
-            }
-        },
-        "nicLan": {
-            "type": "string",
-            "defaultValue": "PortA",
-            "metadata": {
-                "description": "Network Interface Name for LAN Zone"
-            }
-        },
-        "networkSecurityGroupNewOrExisting": {
-            "type": "string",
-            "defaultValue": "new",
-            "allowedValues": [
-                "new",
-                "existing"
-            ],
-            "metadata": {
-                "description": "Create new Network Security Group or use an existing one."
-            }
-        },
-        "networkSecurityGroupName": {
-            "type": "string",
-            "defaultValue": "SecurityGroup",
-            "metadata": {
-                "description": "Name of the Network Security Group"
-            }
-        },
-        "trustedNetwork": {
-          "type": "string",
-          "defaultValue": "*",
-          "metadata": {
-              "description": "Trusted network for admin access. Using * will allow traffic from everywhere; using a CIDR notation, e.g., 203.0.113.0/24, will only allow traffic from that network range."
-          }
-        },
-        "availabilitySetNewOrExisting": {
-            "type": "string",
-            "defaultValue": "new",
-            "allowedValues": [
-                "new",
-                "existing"
-            ],
-            "metadata": {
-                "description": "Create new Availability Set or use an existing one."
-            }
-        },
-        "availabilitySetName": {
-            "type": "string",
-            "defaultValue": "AvailabilitySet",
-            "metadata": {
-                "description": "Name of the Availability Set"
-            }
-        }
+  "parameters": {
+    "vmName": {
+      "type": "string",
+      "defaultValue": "XG-Firewall",
+      "metadata": {
+        "description": "Name for the Virtual Machine."
+      }
     },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Virtual Machine."
+      }
+    },
+    "imageSku": {
+      "type": "string",
+      "defaultValue": "byol",
+      "allowedValues": [
+        "byol",
+        "payg"
+      ],
+      "metadata": {
+        "description": "License type to use."
+      }
+    },
+    "baseUrl": {
+      "type": "string",
+      "metadata": {
+        "artifactsBaseUrl": "",
+        "description": "URL to acquire other VM-Series for Azure templates"
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_A3",
+      "metadata": {
+        "description": "Size of the Virtual Machine."
+      }
+    },
+    "netNewOrExisting": {
+      "type": "string",
+      "defaultValue": "existing",
+      "allowedValues": [
+        "new",
+        "existing"
+      ],
+      "metadata": {
+        "description": "Create new Virtual Network or use an existing one."
+      }
+    },
+    "netRG": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Resource Group of existing Virtual Network (optional)."
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "vnet-FW",
+      "metadata": {
+        "description": "Name of the Virtual Network."
+      }
+    },
+    "netPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.0.0/16",
+      "metadata": {
+        "description": "Prefix for the Virtual Network."
+      }
+    },
+    "wanName": {
+      "type": "string",
+      "defaultValue": "UntrustXG",
+      "metadata": {
+        "description": "Name of the WAN side Subnet."
+      }
+    },
+    "wanPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.5.0/24",
+      "metadata": {
+        "description": "Prefix for the WAN side Subnet."
+      }
+    },
+    "lanName": {
+      "type": "string",
+      "defaultValue": "TrustXG",
+      "metadata": {
+        "description": "Name of the LAN side Subnet."
+      }
+    },
+    "lanPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.6.0/24",
+      "metadata": {
+        "description": "Prefix for the LAN side Subnet."
+      }
+    },
+    "storageNewOrExisting": {
+      "type": "string",
+      "defaultValue": "existing",
+      "allowedValues": [
+        "new",
+        "existing"
+      ],
+      "metadata": {
+        "description": "Create new Storage Account or use an existing one."
+      }
+    },
+    "storageName": {
+      "type": "string",
+      "defaultValue": "promasterstorage",
+      "metadata": {
+        "description": "Unique name for Storage Account."
+      }
+    },
+    "nicWan": {
+      "type": "string",
+      "defaultValue": "PortB",
+      "metadata": {
+        "description": "Network Interface Name for WAN Zone"
+      }
+    },
+    "nicLan": {
+      "type": "string",
+      "defaultValue": "PortA",
+      "metadata": {
+        "description": "Network Interface Name for LAN Zone"
+      }
+    },
+    "networkSecurityGroupNewOrExisting": {
+      "type": "string",
+      "defaultValue": "new",
+      "allowedValues": [
+        "new",
+        "existing"
+      ],
+      "metadata": {
+        "description": "Create new Network Security Group or use an existing one."
+      }
+    },
+    "networkSecurityGroupName": {
+      "type": "string",
+      "defaultValue": "SecurityGroup",
+      "metadata": {
+        "description": "Name of the Network Security Group"
+      }
+    },
+    "trustedNetwork": {
+      "type": "string",
+      "defaultValue": "*",
+      "metadata": {
+        "description": "Trusted network for admin access. Using * will allow traffic from everywhere; using a CIDR notation, e.g., 203.0.113.0/24, will only allow traffic from that network range."
+      }
+    },
+    "availabilitySetNewOrExisting": {
+      "type": "string",
+      "defaultValue": "new",
+      "allowedValues": [
+        "new",
+        "existing"
+      ],
+      "metadata": {
+        "description": "Create new Availability Set or use an existing one."
+      }
+    },
+    "availabilitySetName": {
+      "type": "string",
+      "defaultValue": "AvailabilitySet",
+      "metadata": {
+        "description": "Name of the Availability Set"
+      }
+    }
+  },
     "variables": {
         "availabilitySetTemplate": "[concat(parameters('baseUrl'),'/shared/availabilitySet-',parameters('availabilitySetNewOrExisting'),'.json')]",
         "networkSecurityGroupTemplate": "[concat(parameters('baseUrl'),'/shared/networkSecurityGroup-',parameters('networkSecurityGroupNewOrExisting'),'.json')]",
