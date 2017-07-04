@@ -629,64 +629,21 @@
       }
     },
     {
-      "name": "SetupPublicLoadBalancer",
+      "name": "SetupSophosXGFirewall",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/SetupVNET",
-        "Microsoft.Resources/deployments/SetupVMSeries"
+        "Microsoft.Resources/deployments/SetupVNET"
       ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('publicLBURL')]",
+          "uri": "[variables('setupXG')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "lbName": {
-            "value": "[parameters('appGatewayName')]"
-          },
-          "publicIPAddressName": {
-            "value": "[parameters('appGatewayDnsName')]"
-          },
-          "vnetName": {
-            "value": "[reference('SetupVNET').outputs.vnetName.value]"
-          },
-          "subnetName": {
-            "value": "[parameters('appGatewaySubnetName')]"
-          },
-          "backendIPAddresses": {
-            "value": "[reference('SetupVMSeries').outputs.UntrustPrivateIPAddresses.value]"
-          }
-        }
-      }
-    },
-    {
-      "name": "SetupInternalLoadBalancer",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "Microsoft.Resources/deployments/SetupVNET",
-        "Microsoft.Resources/deployments/SetupVMSeries"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('privateLBURL')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "storageAccountName": {
-            "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
-          },
           "virtualNetworkName": {
             "value": "[reference('SetupVNET').outputs.vnetName.value]"
-          },
-          "virtualNetworkExistingRGName": {
-            "value": "[variables('rgname')]"
-          },
-          "lbName": {
-            "value": "[parameters('internalLoadBalancerName')]"
           },
           "adminUsername": {
             "value": "[parameters('username')]"
@@ -694,25 +651,100 @@
           "adminPassword": {
             "value": "[parameters('password')]"
           },
-          "sshKey": {
-            "value": "[parameters('sshPublicKey')]"
-          },
-          "subnetName": {
-            "value": "[parameters('backendSubnetName')]"
-          },
-          "frontendSubnetName": {
-            "value": "[parameters('trustedSubnetName')]"
-          },
-          "vmSize": {
-            "value": "[parameters('backendVmSize')]"
-          },
           "baseUrl": {
             "value": "[variables('baseUrl')]"
-          }
+          },
+          "storageAccountName": {
+            "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
+          },
         }
       }
-    }
-  ],
-  "outputs": {
-  }
-}
+    },
+        {
+          "name": "SetupPublicLoadBalancer",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+          "dependsOn": [
+            "Microsoft.Resources/deployments/SetupVNET",
+            "Microsoft.Resources/deployments/SetupVMSeries"
+          ],
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('publicLBURL')]",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "lbName": {
+                "value": "[parameters('appGatewayName')]"
+              },
+              "publicIPAddressName": {
+                "value": "[parameters('appGatewayDnsName')]"
+              },
+              "vnetName": {
+                "value": "[reference('SetupVNET').outputs.vnetName.value]"
+              },
+              "subnetName": {
+                "value": "[parameters('appGatewaySubnetName')]"
+              },
+              "backendIPAddresses": {
+                "value": "[reference('SetupVMSeries').outputs.UntrustPrivateIPAddresses.value]"
+              }
+            }
+          }
+        },
+        {
+          "name": "SetupInternalLoadBalancer",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+          "dependsOn": [
+            "Microsoft.Resources/deployments/SetupVNET",
+            "Microsoft.Resources/deployments/SetupVMSeries"
+          ],
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('privateLBURL')]",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "storageAccountName": {
+                "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
+              },
+              "virtualNetworkName": {
+                "value": "[reference('SetupVNET').outputs.vnetName.value]"
+              },
+              "virtualNetworkExistingRGName": {
+                "value": "[variables('rgname')]"
+              },
+              "lbName": {
+                "value": "[parameters('internalLoadBalancerName')]"
+              },
+              "adminUsername": {
+                "value": "[parameters('username')]"
+              },
+              "adminPassword": {
+                "value": "[parameters('password')]"
+              },
+              "sshKey": {
+                "value": "[parameters('sshPublicKey')]"
+              },
+              "subnetName": {
+                "value": "[parameters('backendSubnetName')]"
+              },
+              "frontendSubnetName": {
+                "value": "[parameters('trustedSubnetName')]"
+              },
+              "vmSize": {
+                "value": "[parameters('backendVmSize')]"
+              },
+              "baseUrl": {
+                "value": "[variables('baseUrl')]"
+              }
+            }
+          }
+        },
+
+        "outputs": {
+        }
+      }
