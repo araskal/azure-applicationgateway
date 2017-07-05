@@ -202,20 +202,6 @@
         "description": "Internal Load Balancer name - used to identify resource in Azure portal"
       }
     },
-    "internalLoadBalancerName2": {
-      "type": "string",
-      "defaultValue": "LoadBalancer2",
-      "metadata": {
-        "description": "Internal Load Balancer name - used to identify resource in Azure portal"
-      }
-    },
-    "internalLoadBalancerName3": {
-      "type": "string",
-      "defaultValue": "LoadBalancer3",
-      "metadata": {
-        "description": "Internal Load Balancer name - used to identify resource in Azure portal"
-      }
-    },
     "backendSubnetName": {
       "type": "string",
       "defaultValue": "backendSubnet",
@@ -352,7 +338,7 @@
     "location": "[resourceGroup().location]",
     "rgname": "[resourceGroup().name]",
     "LoadBalancerType": "layer-7",
-    "firewallVmCount": 1,
+    "firewallVmCount": 2,
     "baseUrl": "https://raw.githubusercontent.com/araskal/azure-applicationgateway/master/",
     "nsgURL": "[concat(variables('baseUrl'),'/nsg-new.json')]",
     "vnetURL": "[concat(variables('baseUrl'),'/vnet-new.json')]",
@@ -725,7 +711,7 @@
           }
         }
       }
-    },
+    }
   ],
   "outputs": {
   }
