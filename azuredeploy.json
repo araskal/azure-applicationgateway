@@ -662,6 +662,53 @@
       }
     },
     {
+      "name": "SetupXGFirewall",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/SetupVNET"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('setupXG')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "adminPassword": {
+            "value": "[parameters('password')]"
+          },
+          "lbName": {
+            "value": "[parameters('appGatewayName')]"
+          },
+          "virtualNetworkName": {
+            "value": "[reference('SetupVNET').outputs.vnetName.value]"
+          },
+          "virtualNetworkExistingRGName": {
+            "value": "[variables('rgname')]"
+          },
+          "subnet5Name": {
+            "value": "[parameters('UntrustXGSubnetName')]"
+          },
+          "subnet6Name": {
+            "value": "[parameters('TrustXGSubnetName')]"
+          },
+          "subnet5Prefix": {
+            "value": "[parameters('UntrustXGSubnetPrefix')]"
+          },
+          "subnet6Prefix": {
+            "value": "[parameters('TrustXGSubnetPrefix')]"
+          },
+          "storageAccountName": {
+            "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
+          },
+          "baseUrl": {
+            "value": "[variables('baseUrl')]"
+          }
+        }
+      }
+    },
+    {
       "name": "SetupInternalLoadBalancer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
