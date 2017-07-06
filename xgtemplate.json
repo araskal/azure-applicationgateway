@@ -232,23 +232,23 @@
             "dependsOn": [
                 "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]"
             ],
-            "properties": {
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+          "properties": {
+            "networkSecurityGroup": {
+              "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+            },
+            "ipConfigurations": [
+              {
+                "name": "ipconfig",
+                "properties": {
+                  "privateIPAllocationMethod": "Dynamic",
                 },
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            },
-                            "subnet": {
-                                "id": "[reference('SettingUpVirtualNetwork','2015-01-01').outputs.subnet1Ref.value]"
-                            }
-                        }
-                    }
-                ],
-                "enableIPForwarding": true
+                "subnet": {
+                  "id": "[reference('SettingUpVirtualNetwork','2015-01-01').outputs.subnet1Ref.value]"
+                }
+              }
+            ],
+            "enableIPForwarding": true
+          }
             },
         {
             "apiVersion": "[variables('apiVersion').network]",
