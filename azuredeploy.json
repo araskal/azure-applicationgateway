@@ -346,7 +346,7 @@
     "privateLBURL": "[concat(variables('baseUrl'),'/private-lb-password.json')]",
     "storageAccountSetupURL": "[concat(variables('baseUrl'),'/storageAccount-new.json')]",
     "vmseriesURL": "[concat(variables('baseUrl'),'/vmseries.json')]",
-    "setupXG": "[concat(variables('baseUrl'),'/setupXG.json')]",
+    "setupXG": "[concat(variables('baseUrl'),'/xgtemplate.json')]",
     "setupWebServer": "[concat(variables('baseUrl'),'/setupWebServer.json')]",
     "setupLogServer": "[concat(variables('baseUrl'),'/setupLogServer.json')]",
     "setupDBServer": "[concat(variables('baseUrl'),'/setupDBServer.json')]",
