@@ -490,18 +490,11 @@
       "value": "[reference('SetupNetworkInterfaces0').outputs.UntrustPrivateIPAddress.value]",
       "type": "string"
     },
-    "UntrustPrivateIPAddress2": {
-      "value": "[reference('SetupNetworkInterfaces1').outputs.UntrustPrivateIPAddress.value]",
-      "type": "string"
-    },
     "UntrustPrivateIPAddresses": {
       "value": [
         {
           "IpAddress": "[reference('SetupNetworkInterfaces0').outputs.UntrustPrivateIPAddress.value]"
         },
-        {
-          "IpAddress": "[reference('SetupNetworkInterfaces1').outputs.UntrustPrivateIPAddress.value]"
-        }
       ],
       "type": "array"
     }
