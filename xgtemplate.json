@@ -4,7 +4,6 @@
     "parameters": {
         "baseUrl": {
             "type": "string",
-            "defaultValue": "https://gallery.azure.com/artifact/20151001/sophos.sophos-xg-firewall-solutionsophos-xg-firewall.1.0.4/Artifacts",
             "metadata": {
                 "artifactsBaseUrl": "Base URL of the template package"
             }
@@ -42,7 +41,7 @@
         },
         "netNewOrExisting": {
             "type": "string",
-            "defaultValue": "new",
+            "defaultValue": "existing",
             "allowedValues": [
                 "new",
                 "existing"
@@ -51,157 +50,117 @@
                 "description": "Create new Virtual Network or use an existing one."
             }
         },
-        "netRG": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Resource Group of existing Virtual Network (optional)."
-            }
-        },
-        "netName": {
+      "virtualNetworkExistingRGName": {
+        "type": "string",
+        "defaultValue": "",
+        "metadata": {
+          "description": "Resource Group of existing Virtual Network (optional)."
+        }
+      },
+        "virtualNetworkName":  {
             "type": "string",
             "defaultValue": "VNET",
             "metadata": {
                 "description": "Name of the Virtual Network."
             }
         },
-        "netPrefix": {
-            "type": "string",
-            "defaultValue": "10.0.0.0/16",
-            "metadata": {
-                "description": "Prefix for the Virtual Network."
-            }
+      "subnet5Name": {
+        "type": "string",
+        "defaultValue": "TrustXG",
+        "metadata": {
+          "description": "Name of the WAN side Subnet."
+        }
+      },
+      "subnet5Prefix": {
+          "type": "string",
+          "defaultValue": "192.168.5.0/24",
+          "metadata": {
+            "description": "Prefix for the WAN side Subnet."
+          }
         },
-        "wanName": {
-            "type": "string",
-            "defaultValue": "WAN",
-            "metadata": {
-                "description": "Name of the WAN side Subnet."
-            }
-        },
-        "wanPrefix": {
-            "type": "string",
-            "defaultValue": "10.0.1.0/24",
-            "metadata": {
-                "description": "Prefix for the WAN side Subnet."
-            }
-        },
-        "lanName": {
-            "type": "string",
-            "defaultValue": "LAN",
-            "metadata": {
-                "description": "Name of the LAN side Subnet."
-            }
-        },
-        "lanPrefix": {
-            "type": "string",
-            "defaultValue": "10.0.2.0/24",
-            "metadata": {
-                "description": "Prefix for the LAN side Subnet."
-            }
-        },
-        "publicIpNewOrExisting": {
-            "type": "string",
-            "defaultValue": "new",
-            "allowedValues": [
-                "new",
-                "existing"
-            ],
-            "metadata": {
-                "description": "Create new Public IP or use an existing one."
-            }
-        },
-        "publicIpRG": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Resource Group of existing Public IP (optional)."
-            }
-        },
-        "publicIpName": {
-            "type": "string",
-            "defaultValue": "PublicIP",
-            "metadata": {
-                "description": "Name of the Public IP."
-            }
-        },
-        "publicIpDNS": {
-            "type": "string",
-            "metadata": {
-                "description": "Unique DNS name prefix for Public IP."
-            }
+      "subnet6Name": { 
+        "type": "string",
+        "defaultValue": "UntrustXG",
+        "metadata": {
+          "description": "Name of the LAN side Subnet."
+        }
+      },
+      "subnet6Prefix": {
+          "type": "string",
+          "defaultValue": "192.168.6.0/24",
+          "metadata": {
+            "description": "Prefix for the LAN side Subnet."
+          }
         },
         "storageNewOrExisting": {
-            "type": "string",
-            "defaultValue": "new",
-            "allowedValues": [
-                "new",
-                "existing"
-            ],
-            "metadata": {
-                "description": "Create new Storage Account or use an existing one."
-            }
+          "type": "string",
+          "defaultValue": "new",
+          "allowedValues": [
+            "new",
+            "existing"
+          ],
+          "metadata": {
+            "description": "Create new Storage Account or use an existing one."
+          }
         },
         "storageRG": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Resource Group of existing Storage Account (optional)."
-            }
+          "type": "string",
+          "defaultValue": "",
+          "metadata": {
+            "description": "Resource Group of existing Storage Account (optional)."
+          }
         },
         "storageName": {
-            "type": "string",
-            "metadata": {
-                "description": "Unique name for Storage Account."
-            }
+          "type": "string",
+          "metadata": {
+            "description": "Unique name for Storage Account."
+          }
         },
         "storageType": {
-            "type": "string",
-            "defaultValue": "Standard_LRS",
-            "metadata": {
-                "description": "Replication mode for Storage Account."
-            }
+          "type": "string",
+          "defaultValue": "Standard_LRS",
+          "metadata": {
+            "description": "Replication mode for Storage Account."
+          }
         },
         "location": {
-            "type": "string",
-            "defaultValue": "[resourceGroup().Location]",
-            "metadata": {
-                "description": "Geo-Location you want to deploy to."
-            }
+          "type": "string",
+          "defaultValue": "[resourceGroup().Location]",
+          "metadata": {
+            "description": "Geo-Location you want to deploy to."
+          }
         },
         "nicWan": {
-            "type": "string",
-            "defaultValue": "PortB",
-            "metadata": {
-                "description": "Network Interface Name for WAN Zone"
-            }
+          "type": "string",
+          "defaultValue": "PortB",
+          "metadata": {
+            "description": "Network Interface Name for WAN Zone"
+          }
         },
         "nicLan": {
-            "type": "string",
-            "defaultValue": "PortA",
-            "metadata": {
-                "description": "Network Interface Name for LAN Zone"
-            }
+          "type": "string",
+          "defaultValue": "PortA",
+          "metadata": {
+            "description": "Network Interface Name for LAN Zone"
+          }
         },
         "networkSecurityGroupName": {
-            "type": "string",
-            "defaultValue": "SecurityGroup",
-            "metadata": {
-                "description": "Name of the Security Group"
-            }
+          "type": "string",
+          "defaultValue": "SecurityGroup",
+          "metadata": {
+            "description": "Name of the Security Group"
+          }
         },
         "availabilitySetName": {
-            "type": "string",
-            "defaultValue": "AvailabilitySet",
-            "metadata": {
-                "description": "Name of the Availability Set"
-            }
+          "type": "string",
+          "defaultValue": "AvailabilitySet",
+          "metadata": {
+            "description": "Name of the Availability Set"
+          }
         }
-    },
+      },
     "variables": {
-        "publicIpTemplate": "[concat(parameters('baseUrl'),'/shared/publicip-',parameters('publicIpNewOrExisting'),'.json')]",
         "netTemplate": "[concat(parameters('baseUrl'),'/shared/vnet-',parameters('netNewOrExisting'),'.json')]",
-        "storageTemplate": "[concat(parameters('baseUrl'),'/shared/storageAccount-',parameters('storageNewOrExisting'),'.json')]",
         "group": "[resourceGroup().name]",
         "vhdContainer": "vhds",
         "publicIpType": "Dynamic",
@@ -225,29 +184,6 @@
             "apiVersion": "[variables('apiVersion').compute]",
             "location": "[parameters('location')]",
             "properties": {}
-        },
-        {
-            "name": "SettingUpStorageAccount",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "[variables('apiVersion').resources.deployments]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('storageTemplate')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "storageAccountName": {
-                        "value": "[parameters('storageName')]"
-                    },
-                    "storageAccountType": {
-                        "value": "[parameters('storageType')]"
-                    },
-                    "storageAccountExistingRG": {
-                        "value": "[parameters('storageRG')]"
-                    }
-                }
-            }
         },
         {
             "apiVersion": "[variables('apiVersion').network]",
@@ -289,74 +225,11 @@
             }
         },
         {
-            "name": "SettingUpPublicIP",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "[variables('apiVersion').resources.deployments]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('publicIpTemplate')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "publicIPAddressName": {
-                        "value": "[parameters('publicIpName')]"
-                    },
-                    "publicIPAddressType": {
-                        "value": "[variables('publicIpType')]"
-                    },
-                    "dnsPrefix": {
-                        "value": "[parameters('publicIpDNS')]"
-                    },
-                    "publicIpRGName": {
-                        "value": "[parameters('publicIpRG')]"
-                    }
-                }
-            }
-        },
-        {
-            "name": "SettingUpVirtualNetwork",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "[variables('apiVersion').resources.deployments]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('netTemplate')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "virtualNetworkName": {
-                        "value": "[parameters('netName')]"
-                    },
-                    "virtualNetworkAddressPrefix": {
-                        "value": "[parameters('netPrefix')]"
-                    },
-                    "Subnet1Name": {
-                        "value": "[parameters('wanName')]"
-                    },
-                    "Subnet1Prefix": {
-                        "value": "[parameters('wanPrefix')]"
-                    },
-                    "Subnet2Name": {
-                        "value": "[parameters('lanName')]"
-                    },
-                    "Subnet2Prefix": {
-                        "value": "[parameters('lanPrefix')]"
-                    },
-                    "vnetExistingRGName": {
-                        "value": "[parameters('netRG')]"
-                    }
-                }
-            }
-        },
-        {
             "apiVersion": "[variables('apiVersion').network]",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[parameters('nicWan')]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[concat('Microsoft.Resources/deployments/', 'SettingUpPublicIP')]",
-                "[concat('Microsoft.Resources/deployments/', 'SettingUpVirtualNetwork')]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]"
             ],
             "properties": {
@@ -368,8 +241,6 @@
                         "name": "ipconfig",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[reference('SettingUpPublicIP').outputs.publicIpId.value]"
                             },
                             "subnet": {
                                 "id": "[reference('SettingUpVirtualNetwork','2015-01-01').outputs.subnet1Ref.value]"
@@ -378,8 +249,7 @@
                     }
                 ],
                 "enableIPForwarding": true
-            }
-        },
+            },
         {
             "apiVersion": "[variables('apiVersion').network]",
             "type": "Microsoft.Network/networkInterfaces",

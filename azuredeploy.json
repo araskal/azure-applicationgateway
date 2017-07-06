@@ -338,7 +338,7 @@
     "location": "[resourceGroup().location]",
     "rgname": "[resourceGroup().name]",
     "LoadBalancerType": "layer-7",
-    "firewallVmCount": 2,
+    "firewallVmCount": 1,
     "baseUrl": "https://raw.githubusercontent.com/araskal/azure-applicationgateway/master/",
     "nsgURL": "[concat(variables('baseUrl'),'/nsg-new.json')]",
     "vnetURL": "[concat(variables('baseUrl'),'/vnet-new.json')]",
@@ -629,55 +629,24 @@
       }
     },
     {
-      "name": "SetupPublicLoadBalancer",
+      "name": "SetupXGFirewall",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/SetupVNET",
-        "Microsoft.Resources/deployments/SetupVMSeries"
+        "Microsoft.Resources/deployments/SetupVNET"
       ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('publicLBURL')]",
+          "uri": "[variables('setupXG')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "adminPassword": {
+            "value": "[parameters('password')]"
+          },
           "lbName": {
             "value": "[parameters('appGatewayName')]"
-          },
-          "publicIPAddressName": {
-            "value": "[parameters('appGatewayDnsName')]"
-          },
-          "vnetName": {
-            "value": "[reference('SetupVNET').outputs.vnetName.value]"
-          },
-          "subnetName": {
-            "value": "[parameters('appGatewaySubnetName')]"
-          },
-          "backendIPAddresses": {
-            "value": "[reference('SetupVMSeries').outputs.UntrustPrivateIPAddresses.value]"
-          }
-        }
-      }
-    },
-    {
-      "name": "SetupInternalLoadBalancer",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "Microsoft.Resources/deployments/SetupVNET",
-        "Microsoft.Resources/deployments/SetupVMSeries"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('privateLBURL')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "storageAccountName": {
-            "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
           },
           "virtualNetworkName": {
             "value": "[reference('SetupVNET').outputs.vnetName.value]"
@@ -685,34 +654,112 @@
           "virtualNetworkExistingRGName": {
             "value": "[variables('rgname')]"
           },
-          "lbName": {
-            "value": "[parameters('internalLoadBalancerName')]"
+          "subnet5Name": {
+            "value": "[parameters('UntrustXGSubnetName')]"
           },
-          "adminUsername": {
-            "value": "[parameters('username')]"
+          "subnet6Name": {
+            "value": "[parameters('TrustXGSubnetName')]"
           },
-          "adminPassword": {
-            "value": "[parameters('password')]"
+          "subnet5Prefix": {
+            "value": "[parameters('UntrustXGSubnetPrefix')]"
           },
-          "sshKey": {
-            "value": "[parameters('sshPublicKey')]"
+          "subnet6Prefix": {
+            "value": "[parameters('TrustXGSubnetPrefix')]"
           },
-          "subnetName": {
-            "value": "[parameters('backendSubnetName')]"
-          },
-          "frontendSubnetName": {
-            "value": "[parameters('trustedSubnetName')]"
-          },
-          "vmSize": {
-            "value": "[parameters('backendVmSize')]"
+          "storageAccountName": {
+            "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
           },
           "baseUrl": {
             "value": "[variables('baseUrl')]"
           }
         }
+        }
+    },
+        {
+          "name": "SetupPublicLoadBalancer",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+          "dependsOn": [
+            "Microsoft.Resources/deployments/SetupVNET",
+            "Microsoft.Resources/deployments/SetupVMSeries"
+          ],
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('publicLBURL')]",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "lbName": {
+                "value": "[parameters('appGatewayName')]"
+              },
+              "publicIPAddressName": {
+                "value": "[parameters('appGatewayDnsName')]"
+              },
+              "vnetName": {
+                "value": "[reference('SetupVNET').outputs.vnetName.value]"
+              },
+              "subnetName": {
+                "value": "[parameters('appGatewaySubnetName')]"
+              },
+              "backendIPAddresses": {
+                "value": "[reference('SetupVMSeries').outputs.UntrustPrivateIPAddresses.value]"
+              }
+            }
+          }
+        },
+        {
+          "name": "SetupInternalLoadBalancer",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+          "dependsOn": [
+            "Microsoft.Resources/deployments/SetupVNET",
+            "Microsoft.Resources/deployments/SetupVMSeries"
+          ],
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('privateLBURL')]",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "storageAccountName": {
+                "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
+              },
+              "virtualNetworkName": {
+                "value": "[reference('SetupVNET').outputs.vnetName.value]"
+              },
+              "virtualNetworkExistingRGName": {
+                "value": "[variables('rgname')]"
+              },
+              "lbName": {
+                "value": "[parameters('internalLoadBalancerName')]"
+              },
+              "adminUsername": {
+                "value": "[parameters('username')]"
+              },
+              "adminPassword": {
+                "value": "[parameters('password')]"
+              },
+              "sshKey": {
+                "value": "[parameters('sshPublicKey')]"
+              },
+              "subnetName": {
+                "value": "[parameters('backendSubnetName')]"
+              },
+              "frontendSubnetName": {
+                "value": "[parameters('trustedSubnetName')]"
+              },
+              "vmSize": {
+                "value": "[parameters('backendVmSize')]"
+              },
+              "baseUrl": {
+                "value": "[variables('baseUrl')]"
+              }
+            }
+          }
+        },
+
+        "outputs": {
+        }
       }
-    }
-  ],
-  "outputs": {
-  }
-}
