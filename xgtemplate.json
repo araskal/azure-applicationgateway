@@ -8,7 +8,7 @@
                 "artifactsBaseUrl": "Base URL of the template package"
             }
         },
-        "vmName": {
+        "xgvmName": {
             "type": "string",
             "defaultValue": "XG-Firewall",
             "metadata": {
@@ -110,7 +110,7 @@
             "description": "Resource Group of existing Storage Account (optional)."
           }
         },
-        "storageName": {
+        "storageAccountName": {
           "type": "string",
           "metadata": {
             "description": "Unique name for Storage Account."
@@ -276,7 +276,7 @@
         {
             "apiVersion": "[variables('apiVersion').compute]",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('vmName')]",
+            "name": "[parameters('xgvmName')]",
             "plan": {
                 "publisher": "[variables('imagePublisher')]",
                 "product": "[variables('imageOffer')]",
@@ -297,7 +297,7 @@
                     "vmSize": "[parameters('vmSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[parameters('vmName')]",
+                    "computerName": "[parameters('xgvmName')]",
                     "adminUsername": "[variables('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
@@ -310,20 +310,20 @@
                     },
                     "dataDisks": [
                         {
-                            "name": "[concat(parameters('vmName'),'-dataDisk')]",
+                            "name": "[concat(parameters('xgvmName'),'-dataDisk')]",
                             "lun": 0,
                             "createOption": "FromImage",
                             "vhd": {
-                                "uri": "[concat(reference('SettingUpStorageAccount').outputs.storageAccountEndpoint.value, variables('vhdContainer'),'/',parameters('vmName'),'-aux.vhd')]"
+                                "uri": "[concat(reference('SettingUpStorageAccount').outputs.storageAccountEndpoint.value, variables('vhdContainer'),'/',parameters('xgvmName'),'-aux.vhd')]"
                             }
                         }
                     ],
                     "osDisk": {
-                        "name": "[concat(parameters('vmName'),'-osDisk')]",
+                        "name": "[concat(parameters('xgvmName'),'-osDisk')]",
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
                         "vhd": {
-                            "uri": "[concat(reference('SettingUpStorageAccount').outputs.storageAccountEndpoint.value, variables('vhdContainer'),'/',parameters('vmName'),'-prim.vhd')]"
+                            "uri": "[concat(reference('SettingUpStorageAccount').outputs.storageAccountEndpoint.value, variables('vhdContainer'),'/',parameters('xgvmName'),'-prim.vhd')]"
                         }
                     }
                 },

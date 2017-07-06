@@ -332,6 +332,13 @@
       "metadata": {
         "description": "SSH RSA public key file as a string. Must be specified if Authentication Type is 'sshPublicKey'."
       }
+    },
+    "xgvmName": {
+      "type": "string",
+      "defaultValue": "XG-Firewall",
+      "metadata": {
+        "description": "Name for the Virtual Machine."
+      }
     }
   },
   "variables": {
@@ -677,9 +684,6 @@
         "parameters": {
           "adminPassword": {
             "value": "[parameters('password')]"
-          },
-          "lbName": {
-            "value": "[parameters('appGatewayName')]"
           },
           "virtualNetworkName": {
             "value": "[reference('SetupVNET').outputs.vnetName.value]"
