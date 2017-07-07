@@ -186,6 +186,26 @@
       "properties": {}
     },
     {
+      "name": "SettingUpStorageAccount",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "[variables('apiVersion').resources.deployments]",
+      "properties": {
+        "mode": "Incremental",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
+          },
+          "storageAccountType": {
+            "value": "[parameters('storageType')]"
+          },
+          "storageAccountExistingRG": {
+            "value": "[parameters('storageRG')]"
+          }
+        }
+      },
+    {
       "apiVersion": "[variables('apiVersion').network]",
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[parameters('networkSecurityGroupName')]",
