@@ -406,11 +406,5 @@
         }
       }
     }
-  ],
-    "outputs": {
-        "fqdn": {
-            "value": "[reference('SettingUpPublicIP').outputs.fqdn.value]",
-            "type": "string"
-        }
-    }
+  ]
 }
