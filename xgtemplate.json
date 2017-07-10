@@ -191,7 +191,7 @@
       "apiVersion": "[variables('apiVersion').resources.deployments]",
       "properties": {
         "mode": "Incremental",
-        "contentVersion": "1.0.0.0"
+        "contentVersion": "1.0.0.0",
       "parameters": {
         "storageAccountName": {
           "value": "[parameters('storageAccountName')]"
