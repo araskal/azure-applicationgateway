@@ -1,317 +1,193 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "baseUrl": {
-            "type": "string",
-            "metadata": {
-                "artifactsBaseUrl": "Base URL of the template package"
-            }
-        },
-        "xgvmName": {
-            "type": "string",
-            "defaultValue": "XG-Firewall",
-            "metadata": {
-                "description": "Name for the Virtual Machine."
-            }
-        },
-        "adminPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Password for the Virtual Machine."
-            }
-        },
-        "imageSku": {
-            "type": "string",
-            "defaultValue": "byol",
-            "allowedValues": [
-                "byol",
-                "payg"
-            ],
-            "metadata": {
-                "description": "License type to use."
-            }
-        },
-        "vmSize": {
-            "type": "string",
-            "defaultValue": "Standard_A3",
-            "metadata": {
-                "description": "Size of the Virtual Machine."
-            }
-        },
-        "netNewOrExisting": {
-            "type": "string",
-            "defaultValue": "existing",
-            "allowedValues": [
-                "new",
-                "existing"
-            ],
-            "metadata": {
-                "description": "Create new Virtual Network or use an existing one."
-            }
-        },
-      "virtualNetworkExistingRGName": {
-        "type": "string",
-        "defaultValue": "",
-        "metadata": {
-          "description": "Resource Group of existing Virtual Network (optional)."
-        }
-      },
-        "virtualNetworkName":  {
-            "type": "string",
-            "defaultValue": "VNET",
-            "metadata": {
-                "description": "Name of the Virtual Network."
-            }
-        },
-      "subnet5Name": {
-        "type": "string",
-        "defaultValue": "TrustXG",
-        "metadata": {
-          "description": "Name of the WAN side Subnet."
-        }
-      },
-      "subnet5Prefix": {
-          "type": "string",
-          "defaultValue": "192.168.5.0/24",
-          "metadata": {
-            "description": "Prefix for the WAN side Subnet."
-          }
-        },
-      "subnet6Name": { 
-        "type": "string",
-        "defaultValue": "UntrustXG",
-        "metadata": {
-          "description": "Name of the LAN side Subnet."
-        }
-      },
-      "subnet6Prefix": {
-          "type": "string",
-          "defaultValue": "192.168.6.0/24",
-          "metadata": {
-            "description": "Prefix for the LAN side Subnet."
-          }
-        },
-        "storageNewOrExisting": {
-          "type": "string",
-          "defaultValue": "new",
-          "allowedValues": [
-            "new",
-            "existing"
-          ],
-          "metadata": {
-            "description": "Create new Storage Account or use an existing one."
-          }
-        },
-        "storageRG": {
-          "type": "string",
-          "defaultValue": "",
-          "metadata": {
-            "description": "Resource Group of existing Storage Account (optional)."
-          }
-        },
-        "storageAccountName": {
-          "type": "string",
-          "metadata": {
-            "description": "Unique name for Storage Account."
-          }
-        },
-        "storageType": {
-          "type": "string",
-          "defaultValue": "Standard_LRS",
-          "metadata": {
-            "description": "Replication mode for Storage Account."
-          }
-        },
-        "location": {
-          "type": "string",
-          "defaultValue": "[resourceGroup().Location]",
-          "metadata": {
-            "description": "Geo-Location you want to deploy to."
-          }
-        },
-        "nicWan": {
-          "type": "string",
-          "defaultValue": "PortB",
-          "metadata": {
-            "description": "Network Interface Name for WAN Zone"
-          }
-        },
-        "nicLan": {
-          "type": "string",
-          "defaultValue": "PortA",
-          "metadata": {
-            "description": "Network Interface Name for LAN Zone"
-          }
-        },
-        "networkSecurityGroupName": {
-          "type": "string",
-          "defaultValue": "SecurityGroup",
-          "metadata": {
-            "description": "Name of the Security Group"
-          }
-        },
-        "availabilitySetName": {
-          "type": "string",
-          "defaultValue": "AvailabilitySet",
-          "metadata": {
-            "description": "Name of the Availability Set"
-          }
-        }
-      },
-    "variables": {
-        "netTemplate": "[concat(parameters('baseUrl'),'/shared/vnet-',parameters('netNewOrExisting'),'.json')]",
-        "group": "[resourceGroup().name]",
-        "vhdContainer": "vhds",
-        "publicIpType": "Dynamic",
-        "adminUsername": "azureuser",
-        "sshKeyPath": "[concat('/home/',variables('adminUsername'),'/.ssh/authorized_keys')]",
-        "apiVersion": {
-            "resources": {
-                "deployments": "2016-02-01"
-            },
-            "network": "2016-06-01",
-            "storage": "2016-01-01",
-            "compute": "2016-03-30"
-        },
-        "imagePublisher": "sophos",
-        "imageOffer": "sophos-xg"
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name for the Storage Account."
+      }
     },
-  "resources": [
-    {
-      "type": "Microsoft.Compute/availabilitySets",
-      "name": "[parameters('availabilitySetName')]",
-      "apiVersion": "[variables('apiVersion').compute]",
-      "location": "[parameters('location')]",
-      "properties": {}
+    "xgVmName": {
+      "type": "string",
+      "defaultValue": "onprem-xg",
+      "metadata": {
+        "description": "Name for the Virtual Machine."
+      }
     },
-    {
-      "name": "SettingUpStorageAccount",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "[variables('apiVersion').resources.deployments]",
-      "properties": {
-        "mode": "Incremental",
-        "contentVersion": "1.0.0.0",
-      "parameters": {
-        "storageAccountName": {
-          "value": "[parameters('storageAccountName')]"
-        },
-        "storageAccountType": {
-          "value": "[parameters('storageType')]"
-        },
-        "storageAccountExistingRG": {
-          "value": "[parameters('storageRG')]"
-        }
+    "xgImageSku": {
+      "type": "string",
+      "defaultValue": "byol",
+      "allowedValues": [
+        "byol",
+        "payg"
+      ],
+      "metadata": {
+        "description": "License type to use."
+      }
+    },
+    "srvVmName": {
+      "type": "string",
+      "defaultValue": "onprem-srv1",
+      "metadata": {
+        "description": "Name for the Virtual Machine."
+      }
+    },
+    "xgVmSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS2",
+      "metadata": {
+        "description": "Size of the Virtual Machine."
+      }
+    },
+    "srvVmUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "admin"
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Virtual Machine."
       }
     }
+  },
+  "variables": {
+    "location": "[resourceGroup().Location]",
+    "storageType": "Standard_LRS",
+    "vhdContainer": "vhds",
+    "xgWanNic": "azure-xg-wan-nic",
+    "xgLanNic": "azure-xg-lan-nic",
+    "srvLanNic": "azure-srv1-lan-nic",
+    "backendRouteTableName": "backendSubnetRouteTable",
+    "netName": "VNET",
+    "wanName": "UntrustXG",
+    "lanName": "TrustXG",
+    "netPrefix": "192.168.0.0/16",
+    "wanPrefix": "192.168.5.0/24",
+    "lanPrefix": "192.168.6.0/24",
+    "xgLanIp": "192.168.6.5",
+    "srvLanIp": "192.168.6.10",
+    "apiVersion": {
+      "resources": {
+        "deployments": "2016-02-01"
       },
+      "network": "2016-06-01",
+      "storage": "2016-01-01",
+      "compute": "2016-03-30"
+    },
+    "xgImagePublisher": "sophos",
+    "xgImageOffer": "sophos-xg",
+    "xgAdminUsername": "azureuser",
+    "srvVmSize": "Standard_DS1",
+    "srvImagePublisher": "Canonical",
+    "srvImageOffer": "UbuntuServer",
+    "srvVmOSVersion": "14.04.2-LTS",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('netName'))]",
+    "wanSubnetRef": "[concat(variables('vnetID'), '/subnets/', variables('wanName'))]",
+    "lanSubnetRef": "[concat(variables('vnetID'), '/subnets/', variables('lanName'))]"
+  },
+  "resources": [
     {
-      "apiVersion": "[variables('apiVersion').network]",
-      "type": "Microsoft.Network/networkSecurityGroups",
-      "name": "[parameters('networkSecurityGroupName')]",
-      "location": "[parameters('location')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[concat(parameters('storageAccountName'))]",
+      "apiVersion": "2016-01-01",
+      "location": "[resourceGroup().location]",
       "tags": {
-        "displayName": "NetworkSecurityGroup"
+        "displayName": "storageAccount"
       },
       "properties": {
-        "securityRules": [
+      },
+      "sku": {
+        "name": "[variables('storageType')]"
+      },
+      "kind": "Storage"
+    },
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/routeTables",
+      "name": "[variables('backendRouteTableName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "backendRouteTable"
+      },
+      "properties": {
+        "routes": [
           {
-            "name": "allow_webui",
+            "name": "RouteToSubnet",
             "properties": {
-              "protocol": "tcp",
-              "sourcePortRange": "*",
-              "destinationPortRange": "4444",
-              "sourceAddressPrefix": "*",
-              "destinationAddressPrefix": "*",
-              "access": "Allow",
-              "priority": 101,
-              "direction": "Inbound"
+              "addressPrefix": "[variables('lanPrefix')]",
+              "nextHopType": "VnetLocal"
             }
           },
           {
-            "name": "allow_ssh",
+            "name": "RouteToVnet",
             "properties": {
-              "protocol": "tcp",
-              "sourcePortRange": "*",
-              "destinationPortRange": "22",
-              "sourceAddressPrefix": "*",
-              "destinationAddressPrefix": "*",
-              "access": "Allow",
-              "priority": 102,
-              "direction": "Inbound"
+              "addressPrefix": "[variables('netPrefix')]",
+              "nextHopType": "VirtualAppliance",
+              "nextHopIpAddress": "[variables('xgLanIp')]"
+            }
+          },
+          {
+            "name": "RouteToInternet",
+            "properties": {
+              "addressPrefix": "0.0.0.0/0",
+              "nextHopType": "VirtualAppliance",
+              "nextHopIpAddress": "[variables('xgLanIp')]"
             }
           }
         ]
       }
     },
+
     {
-      "name": "SettingUpVirtualNetwork",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "[variables('apiVersion').resources.deployments]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('netTemplate')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "virtualNetworkName": {
-            "value": "[parameters('virtualNetworkName')]"
-          },
-          "virtualNetworkAddressPrefix": {
-            "value": "192.168.0.0/16"
-          },
-          "Subnet1Name": {
-            "value": "[parameters('subnet5Name')]"
-          },
-          "Subnet1Prefix": {
-            "value": "[parameters('subnet6Prefix')]"
-          },
-          "Subnet2Name": {
-            "value": "[parameters('subnet6Name')]"
-          },
-          "Subnet2Prefix": {
-            "value": "[parameters('subnet6Prefix')]"
-          },
-          "vnetExistingRGName": {
-            "value": "[parameters('virtualNetworkExistingRGName')]"
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "[variables('apiVersion').network]",
-      "type": "Microsoft.Network/networkInterfaces",
-      "name": "[parameters('nicWan')]",
-      "location": "[parameters('location')]",
+      "name": "[variables('netName')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]"
+        "[concat('Microsoft.Network/routeTables/', variables('backendRouteTableName'))]"
       ],
+      "tags": {
+        "displayName": "virtualNetwork"
+      },
       "properties": {
-        "networkSecurityGroup": {
-          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('netPrefix')]"
+          ]
         },
-        "ipConfigurations": [
+        "subnets": [
           {
-            "name": "ipconfig",
+            "name": "[variables('wanName')]",
             "properties": {
-              "privateIPAllocationMethod": "Dynamic"
+              "addressPrefix": "[variables('wanPrefix')]"
+            }
+          },
+          {
+            "name": "[variables('lanName')]",
+            "properties": {
+              "addressPrefix": "[variables('lanPrefix')]"
             },
-            "subnet": {
-              "id": "[reference('SettingUpVirtualNetwork','2015-01-01').outputs.subnet1Ref.value]"
+            "routeTable": {
+              "id": "[resourceId('Microsoft.Network/routeTables', variables('backEndRouteTableName'))]"
             }
           }
-        ],
-        "enableIPForwarding": true
+        ]
       }
     },
+
     {
       "apiVersion": "[variables('apiVersion').network]",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[parameters('nicLan')]",
-      "location": "[parameters('location')]",
+      "name": "[variables('XgWanNic')]",
+      "location": "[variables('location')]",
+      "tags": {
+        "displayName": "XgWanNic"
+      },
       "dependsOn": [
-        "[concat('Microsoft.Resources/deployments/', 'SettingUpVirtualNetwork')]"
+        "[concat('Microsoft.Network/virtualNetworks/', variables('netName'))]"
       ],
       "properties": {
         "ipConfigurations": [
@@ -319,8 +195,9 @@
             "name": "ipconfig",
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
+
               "subnet": {
-                "id": "[reference('SettingUpVirtualNetwork','2015-01-01').outputs.subnet2Ref.value]"
+                "id": "[variables('wanSubnetRef')]"
               }
             }
           }
@@ -329,82 +206,188 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion').compute]",
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('xgvmName')]",
-      "plan": {
-        "publisher": "[variables('imagePublisher')]",
-        "product": "[variables('imageOffer')]",
-        "name": "[parameters('imageSku')]"
+      "apiVersion": "[variables('apiVersion').network]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[variables('xgLanNic')]",
+      "location": "[variables('location')]",
+      "tags": {
+        "displayName": "XgLanNic"
       },
-      "location": "[parameters('location')]",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', parameters('nicWan'))]",
-        "[concat('Microsoft.Network/networkInterfaces/', parameters('nicLan'))]",
-        "[concat('Microsoft.Resources/deployments/', 'SettingUpStorageAccount')]",
-        "[concat('Microsoft.Compute/availabilitySets/',parameters('availabilitySetName'))]"
+        "[concat('Microsoft.Network/virtualNetworks/', variables('netName'))]"
       ],
       "properties": {
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
-        },
-        "hardwareProfile": {
-          "vmSize": "[parameters('vmSize')]"
-        },
-        "osProfile": {
-          "computerName": "[parameters('xgvmName')]",
-          "adminUsername": "[variables('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[variables('imagePublisher')]",
-            "offer": "[variables('imageOffer')]",
-            "sku": "[parameters('imageSku')]",
-            "version": "latest"
-          },
-          "dataDisks": [
-            {
-              "name": "[concat(parameters('xgvmName'),'-dataDisk')]",
-              "lun": 0,
-              "createOption": "FromImage",
-              "vhd": {
-                "uri": "[concat(reference('SettingUpStorageAccount').outputs.storageAccountEndpoint.value, variables('vhdContainer'),'/',parameters('xgvmName'),'-aux.vhd')]"
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[variables('xgLanIp')]",
+              "subnet": {
+                "id": "[variables('lanSubnetRef')]"
               }
             }
-          ],
-          "osDisk": {
-            "name": "[concat(parameters('xgvmName'),'-osDisk')]",
-            "caching": "ReadWrite",
-            "createOption": "FromImage",
-            "vhd": {
-              "uri": "[concat(reference('SettingUpStorageAccount').outputs.storageAccountEndpoint.value, variables('vhdContainer'),'/',parameters('xgvmName'),'-prim.vhd')]"
+          }
+        ],
+        "enableIPForwarding": true
+      }
+    },
+    {
+      "name": "[variables('srvLanNic')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', variables('netName'))]"
+      ],
+      "tags": {
+        "displayName": "ServerVmNic"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[variables('srvLanIp')]",
+              "subnet": {
+                "id": "[variables('lanSubnetRef')]"
+              }
             }
           }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion').compute]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('XgVmName')]",
+      "plan": {
+        "publisher": "[variables('xgImagePublisher')]",
+        "product": "[variables('xgImageOffer')]",
+        "name": "[parameters('xgImageSku')]"
+      },
+      "location": "[variables('location')]",
+      "tags": {
+        "displayName": "XgVm"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('xgLanNic'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('xgWanNic'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
+      ],
+      "properties": {
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "true",
+            "storageUri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob)]"
+          }
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('xgVmSize')]"
         },
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('nicWan'))]",
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('xgWanNic'))]",
               "properties": {
                 "primary": true
               }
             },
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('nicLan'))]",
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('xgLanNic'))]",
               "properties": {
                 "primary": false
               }
             }
           ]
         },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": "true",
-            "storageUri": "[reference('SettingUpStorageAccount').outputs.storageAccountEndpoint.value]"
+        "osProfile": {
+          "computerName": "[parameters('XgVmName')]",
+          "adminUsername": "[variables('xgAdminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('xgImagePublisher')]",
+            "offer": "[variables('xgImageOffer')]",
+            "sku": "[parameters('xgImageSku')]",
+            "version": "latest"
+          },
+          "dataDisks": [
+            {
+              "name": "[concat(parameters('XgVmName'),'-dataDisk')]",
+              "lun": 0,
+              "createOption": "FromImage",
+              "vhd": {
+                "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob, variables('vhdContainer'),'/',parameters('XgVmName'),'-aux.vhd')]"
+              }
+            }
+          ],
+          "osDisk": {
+            "name": "[concat(parameters('XgVmName'),'-osDisk')]",
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "vhd": {
+              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob, variables('vhdContainer'),'/',parameters('XgVmName'),'-prim.vhd')]"
+            }
           }
         }
       }
+    },
+    {
+      "name": "[parameters('srvVmName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('srvLanNic'))]"
+      ],
+      "tags": {
+        "displayName": "serverVm"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('srvVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('srvVmName')]",
+          "adminUsername": "[parameters('srvVmUserName')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('srvImagePublisher')]",
+            "offer": "[variables('srvImageOffer')]",
+            "sku": "[variables('srvVmOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "srvVmOSDisk",
+            "vhd": {
+              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob, variables('vhdContainer'), '/',parameters('srvVmName'),'-prim.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('srvLanNic'))]"
+            }
+          ]
+        }
+      }
     }
-  ]
+  ],
+
+  "outputs": {
+
+    "storageAccountId": {
+      "value": "[resourceId('Microsoft.Storage/StorageAccounts',parameters('storageAccountName'))]",
+      "type": "string"
+    }
+  }
 }
