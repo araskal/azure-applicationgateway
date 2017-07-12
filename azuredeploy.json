@@ -786,7 +786,7 @@
       }
     },
     {
-      "name": "SetupPrivateLoadBalancer3",
+      "name": "Setup3rdtierLoadBalancer3",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
