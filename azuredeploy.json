@@ -667,29 +667,8 @@
           "adminPassword": {
             "value": "[parameters('password')]"
           },
-          "virtualNetworkName": {
-            "value": "[reference('SetupVNET').outputs.vnetName.value]"
-          },
-          "virtualNetworkExistingRGName": {
-            "value": "[variables('rgname')]"
-          },
-          "subnet5Name": {
-            "value": "[parameters('UntrustXGSubnetName')]"
-          },
-          "subnet6Name": {
-            "value": "[parameters('TrustXGSubnetName')]"
-          },
-          "subnet5Prefix": {
-            "value": "[parameters('UntrustXGSubnetPrefix')]"
-          },
-          "subnet6Prefix": {
-            "value": "[parameters('TrustXGSubnetPrefix')]"
-          },
           "storageAccountName": {
             "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
-          },
-          "baseUrl": {
-            "value": "[variables('baseUrl')]"
           }
         }
       }
