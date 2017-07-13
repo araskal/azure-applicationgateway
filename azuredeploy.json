@@ -669,6 +669,9 @@
           },
           "storageAccountName": {
             "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
+          },
+          "adminPassword": {
+            "value": "[parameters('password')]"
           }
         }
       }
