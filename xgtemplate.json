@@ -140,44 +140,6 @@
         ]
       }
     },
-
-    {
-      "name": "[variables('netName')]",
-      "type": "Microsoft.Network/virtualNetworks",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2016-03-30",
-      "dependsOn": [
-        "[concat('Microsoft.Network/routeTables/', variables('backendRouteTableName'))]"
-      ],
-      "tags": {
-        "displayName": "virtualNetwork"
-      },
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[variables('netPrefix')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[variables('wanName')]",
-            "properties": {
-              "addressPrefix": "[variables('wanPrefix')]"
-            }
-          },
-          {
-            "name": "[variables('lanName')]",
-            "properties": {
-              "addressPrefix": "[variables('lanPrefix')]"
-            },
-            "routeTable": {
-              "id": "[resourceId('Microsoft.Network/routeTables', variables('backEndRouteTableName'))]"
-            }
-          }
-        ]
-      }
-    },
-
     {
       "apiVersion": "[variables('apiVersion').network]",
       "type": "Microsoft.Network/networkInterfaces",
@@ -186,9 +148,6 @@
       "tags": {
         "displayName": "XgWanNic"
       },
-      "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', variables('netName'))]"
-      ],
       "properties": {
         "ipConfigurations": [
           {
@@ -213,9 +172,6 @@
       "tags": {
         "displayName": "XgLanNic"
       },
-      "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', variables('netName'))]"
-      ],
       "properties": {
         "ipConfigurations": [
           {
@@ -237,9 +193,6 @@
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
       "apiVersion": "2016-03-30",
-      "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', variables('netName'))]"
-      ],
       "tags": {
         "displayName": "ServerVmNic"
       },
