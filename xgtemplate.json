@@ -60,7 +60,7 @@
     "xgLanNic": "azure-xg-lan-nic",
     "srvLanNic": "azure-srv1-lan-nic",
     "backendRouteTableName": "backendSubnetRouteTable",
-    "netName": "VNET",
+    "netName": "vnet-FW",
     "wanName": "UntrustXG",
     "lanName": "TrustXG",
     "netPrefix": "192.168.0.0/16",
