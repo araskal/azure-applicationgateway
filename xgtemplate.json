@@ -43,7 +43,7 @@
     "srvVmUserName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "admin"
+      "defaultValue": "promasteradmin"
     },
     "adminPassword": {
       "type": "securestring",
