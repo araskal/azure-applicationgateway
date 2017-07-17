@@ -28,7 +28,28 @@
     },
     "srvVmName": {
       "type": "string",
-      "defaultValue": "onprem-srv1",
+      "defaultValue": "promaster-db01",
+      "metadata": {
+        "description": "Name for the Virtual Machine."
+      }
+    },
+    "dcsrvVmName": {
+      "type": "string",
+      "defaultValue": "promaster-auth01",
+      "metadata": {
+        "description": "Name for the Virtual Machine."
+      }
+    },
+    "logsrvVmName": {
+      "type": "string",
+      "defaultValue": "promaster-log01",
+      "metadata": {
+        "description": "Name for the Virtual Machine."
+      }
+    },
+    "filesrvVmName": {
+      "type": "string",
+      "defaultValue": "promaster-file01",
       "metadata": {
         "description": "Name for the Virtual Machine."
       }
@@ -62,7 +83,7 @@
     "dcLanNic": "auth-srv1-lan-nic",
     "logLanNic": "log-srv1-lan-nic",
     "fileLanNic": "file-srv1-lan-nic",
-    "appLanNic":  "app-srv1-lan-nic",
+    "appLanNic": "app-srv1-lan-nic",
     "backendRouteTableName": "backendSubnetRouteTable",
     "netName": "vnet-FW",
     "wanName": "UntrustXG",
@@ -71,15 +92,14 @@
     "logsubnetname": "Log",
     "dbsubnetname": "DB",
     "filesubnetname": "File",
-
     "netPrefix": "192.168.0.0/16",
     "wanPrefix": "192.168.5.0/24",
     "lanPrefix": "192.168.6.0/24",
     "xgLanIp": "192.168.6.5",
-    "srvLanIp": "192.168.6.10",
-    "dcsrvLanIp": "192.168.6.10",
+    "srvLanIp": "192.168.9.10",
+    "dcsrvLanIp": "192.168.7.10",
     "loglanIp": "192.168.8.10",
-
+    "filelanIP": "192.168.10.10",
     "apiVersion": {
       "resources": {
         "deployments": "2016-02-01"
@@ -92,6 +112,10 @@
     "xgImageOffer": "sophos-xg",
     "xgAdminUsername": "azureuser",
     "srvVmSize": "Standard_DS1",
+    "dcVmSize": "Standard_A3",
+    "fileVmSize": "Standard_A3",
+    "logVmSize": "Standard_A3",
+
     "srvImagePublisher": "MicrosoftWindowsServer",
     "srvImageOffer": "WindowsServer",
     "srvVmOSVersion": "2016-Datacenter",
@@ -222,7 +246,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[variables('srvLanIp')]",
               "subnet": {
-                "id": "[variables('lanSubnetRef')]"
+                "id": "[variables('dbSubnetRef')]"
               }
             }
           }
@@ -385,7 +409,7 @@
         "[resourceId('Microsoft.Network/networkInterfaces', variables('srvLanNic'))]"
       ],
       "tags": {
-        "displayName": "serverVm"
+        "displayName": "dbserverVm"
       },
       "properties": {
         "hardwareProfile": {
@@ -420,147 +444,146 @@
           ]
         }
       }
+    },
+    {
+      "name": "[parameters('dcsrvVmName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('dcLanNic'))]"
+      ],
+      "tags": {
+        "displayName": "authserver-Vm"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('dcVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('dcsrvVmName')]",
+          "adminUsername": "[parameters('srvVmUserName')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('srvImagePublisher')]",
+            "offer": "[variables('srvImageOffer')]",
+            "sku": "[variables('srvVmOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "srvVmOSDisk",
+            "vhd": {
+              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob, variables('vhdContainer'), '/',parameters('dcsrvVmName'),'-prim.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('dcLanNic'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "[parameters('logsrvVmName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('logLanNic'))]"
+      ],
+      "tags": {
+        "displayName": "logserver-Vm"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('logVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('logsrvVmName')]",
+          "adminUsername": "[parameters('srvVmUserName')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('srvImagePublisher')]",
+            "offer": "[variables('srvImageOffer')]",
+            "sku": "[variables('srvVmOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "srvVmOSDisk",
+            "vhd": {
+              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob, variables('vhdContainer'), '/',parameters('logsrvVmName'),'-prim.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('logLanNic'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "[parameters('filesrvVmName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('fileLanNic'))]"
+      ],
+      "tags": {
+        "displayName": "serverVm"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('fileVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('filesrvVmName')]",
+          "adminUsername": "[parameters('srvVmUserName')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('srvImagePublisher')]",
+            "offer": "[variables('srvImageOffer')]",
+            "sku": "[variables('srvVmOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "srvVmOSDisk",
+            "vhd": {
+              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob, variables('vhdContainer'), '/',parameters('filesrvVmName'),'-prim.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fileLanNic'))]"
+            }
+          ]
+        }
+      }
     }
   ],
-  {
-    "name": "[parameters('dcsrvVmName')]",
-    "type": "Microsoft.Compute/virtualMachines",
-    "location": "[resourceGroup().location]",
-    "apiVersion": "2015-06-15",
-    "dependsOn": [
-      "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
-      "[resourceId('Microsoft.Network/networkInterfaces', variables('dcLanNic'))]"
-    ],
-    "tags": {
-      "displayName": "authserver-Vm"
-    },
-    "properties": {
-      "hardwareProfile": {
-        "vmSize": "[variables('dcVmSize')]"
-      },
-      "osProfile": {
-        "computerName": "[parameters('dcVmName')]",
-        "adminUsername": "[parameters('srvVmUserName')]",
-        "adminPassword": "[parameters('adminPassword')]"
-      },
-      "storageProfile": {
-        "imageReference": {
-          "publisher": "[variables('srvImagePublisher')]",
-          "offer": "[variables('srvImageOffer')]",
-          "sku": "[variables('srvVmOSVersion')]",
-          "version": "latest"
-        },
-        "osDisk": {
-          "name": "srvVmOSDisk",
-          "vhd": {
-            "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob, variables('vhdContainer'), '/',parameters('dcsrvVmName'),'-prim.vhd')]"
-          },
-          "caching": "ReadWrite",
-          "createOption": "FromImage"
-        }
-      },
-      "networkProfile": {
-        "networkInterfaces": [
-          {
-            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('dcLanNic'))]"
-          }
-        ]
-      }
-    }
-  },
-  {
-    "name": "[parameters('srvVmName')]",
-    "type": "Microsoft.Compute/virtualMachines",
-    "location": "[resourceGroup().location]",
-    "apiVersion": "2015-06-15",
-    "dependsOn": [
-      "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
-      "[resourceId('Microsoft.Network/networkInterfaces', variables('srvLanNic'))]"
-    ],
-    "tags": {
-      "displayName": "serverVm"
-    },
-    "properties": {
-      "hardwareProfile": {
-        "vmSize": "[variables('srvVmSize')]"
-      },
-      "osProfile": {
-        "computerName": "[parameters('srvVmName')]",
-        "adminUsername": "[parameters('srvVmUserName')]",
-        "adminPassword": "[parameters('adminPassword')]"
-      },
-      "storageProfile": {
-        "imageReference": {
-          "publisher": "[variables('srvImagePublisher')]",
-          "offer": "[variables('srvImageOffer')]",
-          "sku": "[variables('srvVmOSVersion')]",
-          "version": "latest"
-        },
-        "osDisk": {
-          "name": "srvVmOSDisk",
-          "vhd": {
-            "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob, variables('vhdContainer'), '/',parameters('srvVmName'),'-prim.vhd')]"
-          },
-          "caching": "ReadWrite",
-          "createOption": "FromImage"
-        }
-      },
-      "networkProfile": {
-        "networkInterfaces": [
-          {
-            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('srvLanNic'))]"
-          }
-        ]
-      }
-    }
-  },
-  {
-    "name": "[parameters('srvVmName')]",
-    "type": "Microsoft.Compute/virtualMachines",
-    "location": "[resourceGroup().location]",
-    "apiVersion": "2015-06-15",
-    "dependsOn": [
-      "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
-      "[resourceId('Microsoft.Network/networkInterfaces', variables('srvLanNic'))]"
-    ],
-    "tags": {
-      "displayName": "serverVm"
-    },
-    "properties": {
-      "hardwareProfile": {
-        "vmSize": "[variables('srvVmSize')]"
-      },
-      "osProfile": {
-        "computerName": "[parameters('srvVmName')]",
-        "adminUsername": "[parameters('srvVmUserName')]",
-        "adminPassword": "[parameters('adminPassword')]"
-      },
-      "storageProfile": {
-        "imageReference": {
-          "publisher": "[variables('srvImagePublisher')]",
-          "offer": "[variables('srvImageOffer')]",
-          "sku": "[variables('srvVmOSVersion')]",
-          "version": "latest"
-        },
-        "osDisk": {
-          "name": "srvVmOSDisk",
-          "vhd": {
-            "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob, variables('vhdContainer'), '/',parameters('srvVmName'),'-prim.vhd')]"
-          },
-          "caching": "ReadWrite",
-          "createOption": "FromImage"
-        }
-      },
-      "networkProfile": {
-        "networkInterfaces": [
-          {
-            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('srvLanNic'))]"
-          }
-        ]
-      }
-    }
-  },
-
 
   "outputs": {
 
