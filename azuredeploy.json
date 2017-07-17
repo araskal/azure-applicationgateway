@@ -382,7 +382,6 @@
     "setupFileServer": "[concat(variables('baseUrl'),'/setupFileServer.json')]",
     "setupAppServer": "[concat(variables('baseUrl'),'/setupAppServer.json')]",
     "privateLBURL2": "[concat(variables('baseUrl'),'/setup2ndLBInternal.json')]",
-    "privateLBURL3": "[concat(variables('baseUrl'),'/setup3rdLBInternal.json')]"
   },
   "resources": [
     {
