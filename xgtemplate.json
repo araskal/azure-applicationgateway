@@ -10,7 +10,7 @@
     },
     "xgVmName": {
       "type": "string",
-      "defaultValue": "onprem-xg",
+      "defaultValue": "pro-int-fw-xg",
       "metadata": {
         "description": "Name for the Virtual Machine."
       }
@@ -28,28 +28,28 @@
     },
     "srvVmName": {
       "type": "string",
-      "defaultValue": "promaster-db01",
+      "defaultValue": "pro-db01",
       "metadata": {
         "description": "Name for the Virtual Machine."
       }
     },
     "dcsrvVmName": {
       "type": "string",
-      "defaultValue": "promaster-auth01",
+      "defaultValue": "pro-auth01",
       "metadata": {
         "description": "Name for the Virtual Machine."
       }
     },
     "logsrvVmName": {
       "type": "string",
-      "defaultValue": "promaster-log01",
+      "defaultValue": "pro-log01",
       "metadata": {
         "description": "Name for the Virtual Machine."
       }
     },
     "filesrvVmName": {
       "type": "string",
-      "defaultValue": "promaster-file01",
+      "defaultValue": "pro-file01",
       "metadata": {
         "description": "Name for the Virtual Machine."
       }
