@@ -131,18 +131,6 @@
       "metadata": {
         "description": "backend WWW CIDR"
       }
-    }
-  },
-  "variables": {
-    "location": "[resourceGroup().location]",
-    "rgname": "[resourceGroup().id]",
-  },
-  "resources": [
-  ],
-  "outputs": {
-    "vnetName": {
-      "value": "[parameters('virtualNetworkName')]",
-      "type": "string"
     },
     "subnet5Prefix": {
       "type": "string",
@@ -185,6 +173,128 @@
       "metadata": {
         "description": "File Services CIDR"
       }
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "rgname": "[resourceGroup().id]",
+    "vnetname": "[parameters('virtualNetworkName')]",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetname'))]",
+    "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet0Name'))]",
+    "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet1Name'))]",
+    "subnet2Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet2Name'))]",
+    "subnet3Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet3Name'))]",
+    "subnet4Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet4Name'))]",
+    "subnet5Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet5Name'))]",
+    "subnet6Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet6Name'))]",
+    "subnet7Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet7Name'))]",
+    "subnet8Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet8Name'))]",
+    "subnet9Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet9Name'))]",
+    "subnet10Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet10Name'))]",
+    "subnets": [
+      {
+        "name": "[parameters('subnet0Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet0Prefix')]",
+          "networkSecurityGroup": {
+            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+          }
+        }
+      },
+      {
+        "name": "[parameters('subnet1Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet1Prefix')]"
+        }
+      },
+      {
+        "name": "[parameters('subnet2Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet2Prefix')]"
+        }
+      },
+      {
+        "name": "[parameters('subnet3Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet3Prefix')]"
+        }
+      },
+      {
+        "name": "[parameters('subnet4Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet4Prefix')]"
+        }
+      },
+      {
+        "name": "[parameters('subnet5Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet5Prefix')]"
+        }
+      },
+      {
+        "name": "[parameters('subnet6Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet6Prefix')]"
+        }
+      },
+      {
+        "name": "[parameters('subnet7Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet7Prefix')]"
+        }
+      },
+      {
+        "name": "[parameters('subnet8Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet8Prefix')]"
+        }
+      },
+      {
+        "name": "[parameters('subnet9Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet9Prefix')]"
+        }
+      },
+      {
+        "name": "[parameters('subnet10Name')]",
+        "properties": {
+          "addressPrefix": "[parameters('subnet10Prefix')]"
+        }
+      }
+    ]
+  },
+  "resources": [
+    {
+      "name": "[variables('vnetname')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[variables('location')]",
+      "apiVersion": "2015-06-15",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('virtualNetworkAddressPrefix')]"
+          ]
+        },
+        "subnets": "[variables('subnets')]"
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "Bastion_Host_Public_IP",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "publicIPAllocationMethod": "Static"
+      },
+      "tags": {
+        "displayName": "PublicIPAddress - Bastion"
+      }
+    }
+  ],
+  "outputs": {
+    "vnetName": {
+      "value": "[variables('vnetname')]",
+      "type": "string"
     }
   }
 }
