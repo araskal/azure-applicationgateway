@@ -217,6 +217,7 @@
       }
     },
     {
+      "apiVersion": "[variables('apiVersion').network]",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('bastionNic')]",
       "location": "[variables('location')]",
