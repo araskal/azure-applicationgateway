@@ -33,13 +33,6 @@
         "description": "Name for the Virtual Machine."
       }
     },
-    "bastionVmName": {
-      "type": "string",
-      "defaultValue": "bastion_host",
-      "metadata": {
-        "description": "Name for the Virtual Machine."
-      }
-    },
     "dcsrvVmName": {
       "type": "string",
       "defaultValue": "pro-auth01",
@@ -84,7 +77,6 @@
     "location": "[resourceGroup().Location]",
     "storageType": "Standard_LRS",
     "vhdContainer": "vhds",
-    "backendsubnetname": "backendSubnet",
     "xgWanNic": "azure-xg-wan-nic",
     "xgLanNic": "azure-xg-lan-nic",
     "srvLanNic": "db-srv1-lan-nic",
@@ -92,7 +84,6 @@
     "logLanNic": "log-srv1-lan-nic",
     "fileLanNic": "file-srv1-lan-nic",
     "appLanNic": "app-srv1-lan-nic",
-    "bastionNic": "bastian-nic",
     "backendRouteTableName": "backendSubnetRouteTable",
     "netName": "vnet-FW",
     "wanName": "UntrustXG",
@@ -104,7 +95,6 @@
     "netPrefix": "192.168.0.0/16",
     "wanPrefix": "192.168.5.0/24",
     "lanPrefix": "192.168.6.0/24",
-    "bastionLanIP": "192.168.4.200",
     "xgLanIp": "192.168.6.5",
     "srvLanIp": "192.168.9.10",
     "dcsrvLanIp": "192.168.7.10",
@@ -125,7 +115,6 @@
     "dcVmSize": "Standard_A3",
     "fileVmSize": "Standard_A3",
     "logVmSize": "Standard_A3",
-    "bastionVmSize": "Standard_A3",
 
     "srvImagePublisher": "MicrosoftWindowsServer",
     "srvImageOffer": "WindowsServer",
@@ -220,32 +209,6 @@
     {
       "apiVersion": "[variables('apiVersion').network]",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('bastionNic')]",
-      "location": "[variables('location')]",
-      "tags": {
-        "displayName": "Bastion-Nic"
-      },
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig",
-            "properties": {
-              "privateIPAllocationMethod": "Dynamic",
-              "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('backendsubnetname').pipName)]"
-              },
-              "subnet": {
-                "id": "backendSubnet"
-              }
-            }
-          }
-        ],
-        "enableIPForwarding": true
-      }
-    },
-    {
-      "apiVersion": "[variables('apiVersion').network]",
-      "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('xgLanNic')]",
       "location": "[variables('location')]",
       "tags": {
@@ -268,7 +231,6 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion').network]",
       "name": "[variables('srvLanNic')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
@@ -292,7 +254,6 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion').network]",
       "name": "[variables('dcLanNic')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
@@ -316,7 +277,6 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion').network]",
       "name": "[variables('logLanNic')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
@@ -340,7 +300,6 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion').network]",
       "name": "[variables('fileLanNic')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
@@ -441,7 +400,6 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion').compute]",
       "name": "[parameters('srvVmName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
@@ -488,55 +446,6 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion').compute]",
-      "name": "[parameters('bastionVmName')]",
-      "type": "Microsoft.Compute/virtualMachines",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2015-06-15",
-      "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
-        "[resourceId('Microsoft.Network/networkInterfaces', variables('bastionNic'))]"
-      ],
-      "tags": {
-        "displayName": "bastionVm"
-      },
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "[variables('bastionVmSize')]"
-        },
-        "osProfile": {
-          "computerName": "[parameters('bastionVmName')]",
-          "adminUsername": "[parameters('srvVmUserName')]",
-          "adminPassword": "[parameters('adminPassword')]"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[variables('srvImagePublisher')]",
-            "offer": "[variables('srvImageOffer')]",
-            "sku": "[variables('srvVmOSVersion')]",
-            "version": "latest"
-          },
-          "osDisk": {
-            "name": "srvVmOSDisk",
-            "vhd": {
-              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob, variables('vhdContainer'), '/',parameters('bastionVmName'),'-prim.vhd')]"
-            },
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
-          }
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('bastionNic'))]"
-            }
-          ]
-        }
-      }
-    },
-
-    {
-      "apiVersion": "[variables('apiVersion').compute]",
       "name": "[parameters('dcsrvVmName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
@@ -583,7 +492,6 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion').compute]",
       "name": "[parameters('logsrvVmName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
@@ -630,7 +538,6 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion').compute]",
       "name": "[parameters('filesrvVmName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
