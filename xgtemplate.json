@@ -232,7 +232,6 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id":
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('backendsubnetname').pipName)]"
               },
               "subnet": {
