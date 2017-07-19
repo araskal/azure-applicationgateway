@@ -277,6 +277,18 @@
         },
         "subnets": "[variables('subnets')]"
       }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "Bastion Host Public IP",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "publicIPAllocationMethod": "Static"
+      },
+      "tags": {
+        "displayName": "PublicIPAddress - Bastion"
+      }
     }
   ],
   "outputs": {
