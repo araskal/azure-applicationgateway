@@ -243,6 +243,7 @@
       }
     },
     {
+      "apiVersion": "[variables('apiVersion').network]",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('xgLanNic')]",
       "location": "[variables('location')]",
@@ -266,6 +267,7 @@
       }
     },
     {
+      "apiVersion": "[variables('apiVersion').network]",
       "name": "[variables('srvLanNic')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
@@ -289,6 +291,7 @@
       }
     },
     {
+      "apiVersion": "[variables('apiVersion').network]",
       "name": "[variables('dcLanNic')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
@@ -312,6 +315,7 @@
       }
     },
     {
+      "apiVersion": "[variables('apiVersion').network]",
       "name": "[variables('logLanNic')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
@@ -335,6 +339,7 @@
       }
     },
     {
+      "apiVersion": "[variables('apiVersion').network]",
       "name": "[variables('fileLanNic')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
@@ -435,6 +440,7 @@
       }
     },
     {
+      "apiVersion": "[variables('apiVersion').compute]",
       "name": "[parameters('srvVmName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
@@ -481,6 +487,7 @@
       }
     },
     {
+      "apiVersion": "[variables('apiVersion').compute]",
       "name": "[parameters('bastionVmName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
@@ -528,6 +535,7 @@
     },
 
     {
+      "apiVersion": "[variables('apiVersion').compute]",
       "name": "[parameters('dcsrvVmName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
@@ -574,6 +582,7 @@
       }
     },
     {
+      "apiVersion": "[variables('apiVersion').compute]",
       "name": "[parameters('logsrvVmName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
@@ -620,6 +629,7 @@
       }
     },
     {
+      "apiVersion": "[variables('apiVersion').compute]",
       "name": "[parameters('filesrvVmName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
