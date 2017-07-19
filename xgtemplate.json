@@ -84,6 +84,7 @@
     "location": "[resourceGroup().Location]",
     "storageType": "Standard_LRS",
     "vhdContainer": "vhds",
+    "backendsubnetname": "backendSubnet",
     "xgWanNic": "azure-xg-wan-nic",
     "xgLanNic": "azure-xg-lan-nic",
     "srvLanNic": "db-srv1-lan-nic",
@@ -231,7 +232,8 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "Bastion Host Public IP"
+                "id":
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('backendsubnetname').pipName)]"
               },
               "subnet": {
                 "id": "backendSubnet"
