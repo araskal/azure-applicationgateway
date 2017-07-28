@@ -100,6 +100,7 @@
     "dcsrvLanIp": "192.168.7.10",
     "loglanIp": "192.168.8.10",
     "filelanIP": "192.168.10.10",
+    "publicIPAddressType": "Dynamic",
     "apiVersion": {
       "resources": {
         "deployments": "2016-02-01"
